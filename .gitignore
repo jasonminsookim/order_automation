@@ -70,7 +70,7 @@ fabric.properties
 .idea/caches/build_file_checksums.ser
 
 # The config setup jupyter notebook for the amazon credentials
-0.0-jmk-setup_config.ipynb
+jupyter_notebooks/0.0-jmk-setup_config.ipynb
 
 # Config file for amazon credntials
 config.ini
@@ -85,3 +85,5 @@ config.ini
 .idea/order_automation.iml
 .idea/vcs.xml
 data/
+
+.DS_Store
