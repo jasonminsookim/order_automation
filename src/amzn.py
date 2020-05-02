@@ -232,13 +232,12 @@ def add_items_to_cart(orders_dict_list, driver, order_index, order_results_dict_
 
         # Chooses One-time purchase if it is an option.
         if check_exists_by_xpath(driver, "//i[@class='a-icon a-accordion-radio a-icon-radio-inactive']"):
-            text_for_button = driver.find_element_by_xpath("//div[contains(text(),':')]").text.strip()
-            print(text_for_button)
+            alternate_selection_icon = driver.find_element_by_xpath("//i[@class='a-icon a-accordion-radio a-icon-radio-inactive']")
+            alt_select_parent = alternate_selection_icon.find_element_by_xpath("..").text
 
-            if text_for_button in ['One-time purchase:']:
+            if "One-time purchase:" in alt_select_parent:
                 driver.find_element_by_xpath("//i[@class='a-icon a-accordion-radio a-icon-radio-inactive']").click()
                 time.sleep(2)
-
 
         # Check if select quantity and add to car exists
         select_quantity_exists = check_exists_by_xpath(driver, "//select[@id='quantity']")

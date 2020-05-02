@@ -20,5 +20,5 @@ def setup():
 
     # Sets up chrome driver with the additional options.
     chrome_driver = webdriver.Chrome(options=chrome_options)
-    chrome_driver.implicitly_wait(10)
+    chrome_driver.implicitly_wait(1.5)
     return chrome_driver
