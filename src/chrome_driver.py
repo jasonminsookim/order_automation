@@ -2,12 +2,12 @@
 from selenium import webdriver
 
 
-def setup_chrome_driver():
+def setup():
     # Set option to Chrome headless.
     chrome_options = webdriver.ChromeOptions()
 
     # Tries to avoid bot detection.
-    # chrome_options.add_argument('headless') # headless seems to fuck things up
+    # chrome_options.add_argument('headless')  # headless seems to make it break.
     chrome_options.add_argument("start-maximized")
     chrome_options.add_argument("disable-infobars")
     chrome_options.add_argument("--disable-extensions")

@@ -87,3 +87,5 @@ config.ini
 data/
 
 .DS_Store
+
+credentials.json
