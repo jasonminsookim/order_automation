@@ -84,6 +84,7 @@ config.ini
 .idea/modules.xml
 .idea/order_automation.iml
 .idea/vcs.xml
+/.idea/
 data/
 
 .DS_Store

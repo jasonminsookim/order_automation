@@ -137,21 +137,18 @@ def clear_cart(driver):
         while cart_total > 0:
             if check_exists_by_xpath(driver, xpath_for_multiple_items):
                 driver.find_element_by_xpath(xpath_for_multiple_items).click()
-                # Recalculate the number of items in the checkout cart.
+
             else:
                 driver.get("https://www.amazon.com/gp/cart/view.html?ref_=nav_cart")
-                driver.find_element_by_xpath("//span[2]//span[1]//input[1]").click()
-                print(f"Checkout cart has been cleared of {start_cart_total} items.")
+                if check_exists_by_xpath(driver, "//span[2]//span[1]//input[1]"):
+                    driver.find_element_by_xpath("//span[2]//span[1]//input[1]").click()
 
             cart_total = get_num_cart_items(driver)
+            if cart_total == 0:
+                print(f"Checkout cart has been cleared of {start_cart_total} items.")
 
     else:
         print("Checkout cart does not have any items to clear.")
-
-
-def select_item_specific_details(driver, product):
-    print(product)
-
 
 
 def add_items_to_cart(orders_dict_list, driver, order_index, order_results_dict_list):
@@ -223,12 +220,13 @@ def add_items_to_cart(orders_dict_list, driver, order_index, order_results_dict_
                 if discovery_method == "span":
                     result_href = search_result.find_element_by_xpath('..').get_attribute("href")
                     multiple_hrefs.append(result_href)
-                    if any(product_id_alt in href_one for product_id_alt in product_id_alts_list):
-                        product_id_matches = True
-                        href_one = result_href
-                        driver.get(result_href)
-                        went_to_product_page = True
-                        break
+
+                if product_id_bh in result_href or product_id_dp in result_href:
+                    product_id_matches = True
+                    href_one = result_href
+                    driver.get(result_href)
+                    went_to_product_page = True
+                    break
 
         # Chooses One-time purchase if it is an option.
         if check_exists_by_xpath(driver, "//i[@class='a-icon a-accordion-radio a-icon-radio-inactive']"):
@@ -243,16 +241,18 @@ def add_items_to_cart(orders_dict_list, driver, order_index, order_results_dict_
         select_quantity_exists = check_exists_by_xpath(driver, "//select[@id='quantity']")
         add_to_cart_exists = check_exists_by_xpath(driver, "//input[@id='add-to-cart-button']")
 
-        select_item_specific_details(driver, product)
-
         select_quantity_num_avail = None
         # Select the quantity
         if went_to_product_page and product_id_matches and select_quantity_exists and add_to_cart_exists:
             select_quantity_num_avail = select_quantity(driver, product_quant)
             if select_quantity_num_avail:
+                before_add_to_cart_quantity = get_num_cart_items(driver)
                 driver.find_element_by_xpath("//input[@id='add-to-cart-button']").click()
-                added_to_cart = True
-                time.sleep(2.5)
+                driver.get("https://www.amazon.com/")
+                after_add_to_cart_quantity = get_num_cart_items(driver)
+
+                if after_add_to_cart_quantity - before_add_to_cart_quantity == product_quant:
+                    added_to_cart = True
 
         # Append the result of the order attempt to a dictionary/DataFrame
         result_row_dict = {'order_index': order_index,
