@@ -90,3 +90,6 @@ data/
 .DS_Store
 
 credentials.json
+
+# ignore venv/
+/venv/
